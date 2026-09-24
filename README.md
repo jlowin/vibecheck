@@ -15,6 +15,8 @@ review = "vibecheck is awesome!"
 
 if check("Are the vibes good?", review):
     print("✅")
+
+# ✅
 ```
 
 vibecheck has four functions: `check` answers yes or no, `classify` picks one option, `label` picks every option that applies, and `score` rates on a scale. Judgment calls, as function calls.
