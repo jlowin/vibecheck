@@ -35,9 +35,9 @@ export TYPESAFE_API_KEY=...
 
 Every function in vibecheck is async, and the examples on this page use top-level `await`, which works as written in Jupyter and in the `python -m asyncio` shell. For scripts and other synchronous code, the same functions live in [`vibecheck.sync`](#sync-and-async).
 
-## Decisions
+## Four Functions
 
-vibecheck has four kinds of decisions, and each one is a function. Every call reads the same way: the question first, then the data it's about. The function you choose determines what kind of answer comes back.
+The whole API is four functions. Each one takes a question and the data it's about, and returns a plain Python value:
 
 | Function | Asks | Returns |
 |---|---|---|
@@ -45,6 +45,8 @@ vibecheck has four kinds of decisions, and each one is a function. Every call re
 | `classify` | Which one of these? | one option |
 | `label` | Which of these apply? | a list of options |
 | `score` | Where on this scale? | a `float` |
+
+Everything else in vibecheck applies these four at scale, to every item in a list or to many questions about the same data.
 
 ### Check
 
@@ -433,9 +435,9 @@ ticket = "I was charged twice for order A-104 and nobody has answered my emails.
 triage = await assess("Triage this support ticket", Triage, ticket)
 ```
 
-`triage` comes back as something like `Triage(team='billing', urgent=True, frustration=2.0, topics=['refund'])`. The field's type decides which kind of decision it is, and `Annotated` metadata says how to ask:
+`triage` comes back as something like `Triage(team='billing', urgent=True, frustration=2.0, topics=['refund'])`. The field's type decides which function asks it, and `Annotated` metadata says how to ask:
 
-| Field type | Decision | Needs |
+| Field type | Function | Needs |
 |---|---|---|
 | `bool` | `check` | nothing |
 | `Literal[...]` or an `Enum` | `classify` | nothing |
