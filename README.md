@@ -1,23 +1,46 @@
 # vibecheck
 
-**The easiest decisions you'll ever make.**
+**The easiest decisions your code will ever make.**
 
-vibecheck lets you drop decision models right into your Python code.
+vibecheck turns decision models into simple building blocks for Python.
 
 Decision models such as [Jev](https://typesafe.ai) are a new kind of AI model built for judgment calls. They answer typed questions (yes or no, pick one, rate on a scale) in a fraction of a second, for a fraction of a cent, with a probability attached to every answer.
 
 vibecheck puts all of that one function call away. Each call returns a plain Python value, with no prompts to template, no text to parse, and no agents to configure:
 
 ```python
-from vibecheck import check
+from vibecheck.sync import check
 
 ticket = "Third outage this month. Fix it by Friday or we're moving to another vendor."
 
-if await check("Is the customer threatening to cancel?", ticket):
+if check("Is the customer threatening to cancel?", ticket):
     print("Escalating to the account team")
 ```
 
-## Four Functions
+vibecheck has four functions: `check` answers yes or no, `classify` picks one option, `label` picks every option that applies, and `score` rates on a scale. Judgment calls, as function calls.
+
+## Why vibecheck
+
+- 🍀 **Simple**: one function call, one plain Python value.
+- 🎛️ **Powerful**: probabilities, thresholds, and "unsure" answers when you need them, out of the way when you don't.
+- ⚡ **Efficient**: batching lets you ask ten questions about the same data for about the cost of one.
+- 🐍 **Pythonic**: a DSL that feels familiar, even the first time you use it.
+
+## Installation
+
+```bash
+uv add vibecheck-py
+```
+
+The package is published as `vibecheck-py` and imported as `vibecheck`.
+
+vibecheck reads your API key from the environment. Get one at [console.typesafe.ai](https://console.typesafe.ai), or use any compatible provider (see [Configuration](#configuration)):
+
+```bash
+export TYPESAFE_API_KEY=...
+```
+
+## Functions
 
 Each function answers a different kind of question:
 
@@ -28,7 +51,7 @@ Each function answers a different kind of question:
 | `label` | Which of these apply? | a list of options |
 | `score` | Where on this scale? | a `float` |
 
-These functions are async by default. To use them synchronously, import them from `vibecheck.sync` instead:
+These functions are async by default, and the examples below use them that way. The blocking versions in `vibecheck.sync`, used in the example at the top of this page, take exactly the same arguments:
 
 ```python
 from vibecheck.sync import check, classify, label, score
@@ -160,20 +183,6 @@ described_stars = await score(
 ```
 
 Both return a value between 1 and 5. Decision models read questions literally, so described levels give better answers than bare numbers.
-
-## Installation
-
-```bash
-uv add vibecheck-py
-```
-
-The package is published as `vibecheck-py` and imported as `vibecheck`.
-
-vibecheck reads your API key from the environment. Get one at [console.typesafe.ai](https://console.typesafe.ai), or use any compatible provider (see [Configuration](#configuration)):
-
-```bash
-export TYPESAFE_API_KEY=...
-```
 
 ## Options
 
