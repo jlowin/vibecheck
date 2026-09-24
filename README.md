@@ -2,7 +2,7 @@
 
 **The easiest decisions your code will ever make.**
 
-vibecheck turns decision models into simple building blocks for Python.
+vibecheck lets you drop decision models right into your Python code.
 
 Decision models such as [Jev](https://typesafe.ai) are a new kind of AI model built for judgment calls. They answer typed questions (yes or no, pick one, rate on a scale) in a fraction of a second, for a fraction of a cent, with a probability attached to every answer.
 
@@ -11,10 +11,10 @@ vibecheck puts all of that one function call away. Each call returns a plain Pyt
 ```python
 from vibecheck.sync import check
 
-ticket = "Third outage this month. Fix it by Friday or we're moving to another vendor."
+review = "vibecheck is awesome!"
 
-if check("Is the customer threatening to cancel?", ticket):
-    print("Escalating to the account team")
+if check("Are the vibes good?", review):
+    print("✅")
 ```
 
 vibecheck has four functions: `check` answers yes or no, `classify` picks one option, `label` picks every option that applies, and `score` rates on a scale. Judgment calls, as function calls.
