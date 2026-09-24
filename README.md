@@ -6,7 +6,7 @@ vibecheck lets you drop decision models right into your Python code.
 
 Decision models such as [Jev](https://typesafe.ai) are a new kind of AI model built for judgment calls. They answer typed questions (yes or no, pick one, rate on a scale) in a fraction of a second, for a fraction of a cent, with a probability attached to every answer.
 
-vibecheck does one thing: it puts decision models in your code. There are no prompts to template, no text to parse, and no agents to configure. There are four functions, one for each kind of decision, and you call whichever one you need. It's the simplest, fastest way to put a decision in your code:
+vibecheck puts all of that one function call away. Each call returns a plain Python value, with no prompts to template, no text to parse, and no agents to configure:
 
 ```python
 from vibecheck import check
@@ -19,7 +19,7 @@ if await check("Is the customer threatening to cancel?", ticket):
 
 ## Four Functions
 
-The whole API is four functions. Each one takes a question and the data it's about, and returns a plain Python value:
+Each function answers a different kind of question:
 
 | Function | Asks | Returns |
 |---|---|---|
@@ -27,10 +27,6 @@ The whole API is four functions. Each one takes a question and the data it's abo
 | `classify` | Which one of these? | one option |
 | `label` | Which of these apply? | a list of options |
 | `score` | Where on this scale? | a `float` |
-
-Everything else in vibecheck applies these four at scale, to every item in a list or to many questions about the same data.
-
-Simple doesn't mean limited: you still get the full power of the Jev API.
 
 These functions are async by default. To use them synchronously, import them from `vibecheck.sync` instead:
 
@@ -295,6 +291,16 @@ They read questions literally. If you find yourself explaining what you really m
 
 Arithmetic, counting, and date comparisons belong in code. A decision model recognizes the shape of an answer rather than computing it, so to count matching items, [filter](#filter) them and take the length. Decision models also don't generate text; when you need a reply written, use a language model.
 
+Once a question works well, give it a name the way you would any other piece of logic. It's an ordinary function with an ordinary signature, you test it the way you test everything else, and swapping it for a heuristic later is a one-line change:
+
+```python
+from vibecheck import check
+
+
+async def needs_reply_today(ticket: str) -> bool:
+    return await check("Does this ticket need a reply today?", ticket, threshold=0.7)
+```
+
 ## Probabilities
 
 Every answer starts as a probability, and sometimes you want the number as well as the decision. Pass `probabilities=True` to any function and you get a pair: the answer, exactly as you'd get it without the flag, and the probabilities behind it.
@@ -453,7 +459,7 @@ A string in `Annotated` is that field's question. Without one, the field's name 
 
 ## Sync and Async
 
-Every function is async by default. The same functions, with the same arguments, live in `vibecheck.sync` for scripts and other synchronous code:
+The functions in `vibecheck.sync` take exactly the same arguments and block until the answer arrives, which suits scripts and other synchronous code:
 
 ```python
 from vibecheck import sync
@@ -467,16 +473,6 @@ if sync.check("Is the customer threatening to cancel?", ticket):
 Batches work with both `async with` and a plain `with`.
 
 Forgetting `await` doesn't fail silently. Writing `if check(...)` without `await` raises a `TypeError` that tells you to add it, instead of treating the pending result as true. The async functions return real coroutines, so they also work with `asyncio.run`, `asyncio.gather`, and task groups.
-
-When the same decision shows up in more than one place, give it a name the way you would any other piece of logic. It's an ordinary function with an ordinary signature, you test it the way you test everything else, and swapping it for a heuristic later is a one-line change:
-
-```python
-from vibecheck import check
-
-
-async def needs_reply_today(ticket: str) -> bool:
-    return await check("Does this ticket need a reply today?", ticket, threshold=0.7)
-```
 
 ## Configuration
 
