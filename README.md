@@ -15,25 +15,9 @@ if await check("Is the customer threatening to cancel?", ticket):
     print("Escalating to the account team")
 ```
 
-A decision fits anywhere you'd write an `if`, a `match`, or a `filter`, and anywhere you need a label, a score, or a record filled in from messy text.
+Every answer comes back as a plain Python value: a `bool` for your `if`, one option for your `match`, a list of labels, or a number on your scale.
 
 vibecheck does one thing: it puts decision models into your code. There are no prompts to template, no text to parse, and no agents to configure. General frameworks for language models, such as LangChain and Pydantic AI, cover much wider ground. vibecheck is small enough to learn from this page.
-
-## Installation
-
-```bash
-uv add vibecheck-py
-```
-
-The package is published as `vibecheck-py` and imported as `vibecheck`.
-
-vibecheck reads your API key from the environment. Get one at [console.typesafe.ai](https://console.typesafe.ai), or use any compatible provider (see [Configuration](#configuration)):
-
-```bash
-export TYPESAFE_API_KEY=...
-```
-
-Every function in vibecheck is async, and the examples on this page use top-level `await`, which works as written in Jupyter and in the `python -m asyncio` shell. For scripts and other synchronous code, the same functions live in [`vibecheck.sync`](#sync-and-async).
 
 ## Four Functions
 
@@ -47,6 +31,8 @@ The whole API is four functions. Each one takes a question and the data it's abo
 | `score` | Where on this scale? | a `float` |
 
 Everything else in vibecheck applies these four at scale, to every item in a list or to many questions about the same data.
+
+Every function in vibecheck is async, and the examples on this page use top-level `await`, which works as written in Jupyter and in the `python -m asyncio` shell. For scripts and other synchronous code, the same functions live in [`vibecheck.sync`](#sync-and-async).
 
 ### Check
 
@@ -174,6 +160,20 @@ described_stars = await score(
 ```
 
 Both return a value between 1 and 5. Decision models read questions literally, so described levels give better answers than bare numbers.
+
+## Installation
+
+```bash
+uv add vibecheck-py
+```
+
+The package is published as `vibecheck-py` and imported as `vibecheck`.
+
+vibecheck reads your API key from the environment. Get one at [console.typesafe.ai](https://console.typesafe.ai), or use any compatible provider (see [Configuration](#configuration)):
+
+```bash
+export TYPESAFE_API_KEY=...
+```
 
 ## Options
 
