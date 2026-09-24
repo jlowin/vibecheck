@@ -15,7 +15,7 @@ if await check("Is the customer threatening to cancel?", ticket):
     print("Escalating to the account team")
 ```
 
-vibecheck does one thing: it puts decision models into your code. There are no prompts to template, no text to parse, and no agents to configure. vibecheck gives you the simplest, fastest way to put AI decisions in your code.
+vibecheck does one thing, and it does it well: it puts decision models in your code. There are no prompts to template, no text to parse, and no agents to configure. vibecheck gives you the simplest, fastest way to put AI decisions in your code.
 
 ## Four Functions
 
@@ -30,7 +30,11 @@ The whole API is four functions. Each one takes a question and the data it's abo
 
 Everything else in vibecheck applies these four at scale, to every item in a list or to many questions about the same data.
 
-Every function in vibecheck is async, and the examples on this page use top-level `await`, which works as written in Jupyter and in the `python -m asyncio` shell. For scripts and other synchronous code, the same functions live in [`vibecheck.sync`](#sync-and-async).
+These functions are async by default. To use them synchronously, import them from `vibecheck.sync` instead:
+
+```python
+from vibecheck.sync import check, classify, label, score
+```
 
 ### Check
 
