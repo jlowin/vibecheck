@@ -1,4 +1,4 @@
-"""vibecheck lets your Python code make judgment calls."""
+"""vibecheck lets you drop decision models right into your Python code."""
 
 from vibecheck._async import assess, check, classify, filter, group, label, score
 from vibecheck._batch import Batch, Deferred
