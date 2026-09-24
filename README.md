@@ -22,10 +22,10 @@ vibecheck does one thing: it puts decision models into your code. There are no p
 ## Installation
 
 ```bash
-uv add pyvibecheck
+uv add vibecheck-py
 ```
 
-The package is published as `pyvibecheck` and imported as `vibecheck`.
+The package is published as `vibecheck-py` and imported as `vibecheck`.
 
 vibecheck reads your API key from the environment. Get one at [console.typesafe.ai](https://console.typesafe.ai), or use any compatible provider (see [Configuration](#configuration)):
 
