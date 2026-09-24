@@ -1,4 +1,5 @@
 import json
+from typing import Any
 
 import httpx2
 from typesafe_sdk import AsyncTypeSafeClient, RetryPolicy, TypeSafeClient
@@ -13,7 +14,7 @@ QUESTIONS = {
     "urgency": Rate(instructions="How urgent?", levels=["low", "high"]),
 }
 
-RESPONSE = {
+RESPONSE: dict[str, Any] = {
     "model": "jev-1.13.0",
     "answers": {
         "refund": {"type": "noul", "noul": 0.9},

@@ -1,6 +1,6 @@
 """Options can be functions, so you can call the one the model picks.
 
-Each function's name is its label, and the first line of its docstring is its description.
+Each function's name is its label, and the model reads its full signature and docstring.
 """
 
 from vibecheck.sync import classify

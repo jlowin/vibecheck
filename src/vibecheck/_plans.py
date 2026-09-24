@@ -420,9 +420,29 @@ def _label_for(option: Any) -> tuple[str, Content | None]:
     if isinstance(option, Enum):
         return (option.value if isinstance(option.value, str) else option.name), None
     if inspect.isroutine(option) or inspect.isclass(option):
-        doc = inspect.getdoc(option)
-        return option.__name__, (doc.strip().splitlines()[0] if doc else None)
+        return option.__name__, _describe_callable(option.__name__, option)
     return str(option), None
+
+
+def _describe_callable(name: str, option: Callable[..., Any]) -> dict[str, str] | None:
+    """A function or class's signature and full docstring, for the model to read."""
+    description: dict[str, str] = {}
+    signature = _signature(option)
+    if signature is not None:
+        description["signature"] = f"{name}{signature}"
+    doc = inspect.getdoc(option)
+    if doc:
+        description["docstring"] = doc
+    return description or None
+
+
+def _signature(option: Callable[..., Any]) -> inspect.Signature | None:
+    try:
+        return inspect.signature(option, eval_str=True)
+    except NameError:
+        return inspect.signature(option)
+    except (TypeError, ValueError):
+        return None
 
 
 def _content(value: Any) -> Content:

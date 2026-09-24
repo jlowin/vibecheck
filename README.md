@@ -208,7 +208,7 @@ team = await classify(
 )
 ```
 
-Options don't have to be strings. vibecheck gives each option a label, sends the labels, and hands back the original object, so you can choose between functions and call the one the model picks:
+Options don't have to be strings. vibecheck gives each option a label, sends the labels, and hands back the original object, so you can choose between functions and call the one the model picks. The model sees each function's whole signature and docstring, so write them the way you'd explain the function to a colleague:
 
 ```python
 from vibecheck import classify
@@ -258,7 +258,7 @@ Here is how each kind of option becomes a label and a description:
 |---|---|---|
 | `str` | the string | the dict value, if you passed a dict |
 | Enum member | its value if that's a string, otherwise its name | the dict value, if you passed a dict |
-| function or class | `__name__` | the first line of its docstring, unless you passed a dict value |
+| function or class | `__name__` | its full signature and docstring, unless you passed a dict value |
 | anything else | `str(value)` | the dict value, if you passed a dict |
 
 Two options that end up with the same label raise a `ValueError` before any request is sent, because the answer couldn't be mapped back to one of them.
