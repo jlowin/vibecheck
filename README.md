@@ -42,6 +42,8 @@ vibecheck reads your API key from the environment. Get one at [console.typesafe.
 export TYPESAFE_API_KEY=...
 ```
 
+The [`examples`](examples) folder has a runnable script for each function. Try one with `uv run examples/check.py`.
+
 ## Functions
 
 Each function answers a different kind of question:
