@@ -9,23 +9,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
-
-      - name: Check the release tag matches the package version
-        run: |
-          version="$(uv version --short)"
-          tag="${GITHUB_REF_NAME#v}"
-          if [ "$tag" != "$version" ]; then
-            echo "Release tag $GITHUB_REF_NAME doesn't match pyproject.toml version $version"
-            exit 1
-          fi
 
       - name: Test
         run: uv run --frozen pytest
 
       - name: Build
         run: uv build
+
+      - name: Check the built version matches the release tag
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          if ! ls dist/vibecheck_py-"$tag"-*.whl >/dev/null 2>&1; then
+            echo "Built $(ls dist/*.whl) doesn't match release tag $GITHUB_REF_NAME"
+            exit 1
+          fi
 
       - uses: actions/upload-artifact@v7
         with:
