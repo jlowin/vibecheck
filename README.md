@@ -15,9 +15,7 @@ if await check("Is the customer threatening to cancel?", ticket):
     print("Escalating to the account team")
 ```
 
-Every answer comes back as a plain Python value: a `bool` for your `if`, one option for your `match`, a list of labels, or a number on your scale.
-
-vibecheck does one thing: it puts decision models into your code. There are no prompts to template, no text to parse, and no agents to configure. General frameworks for language models, such as LangChain and Pydantic AI, cover much wider ground. vibecheck is small enough to learn from this page.
+vibecheck does one thing: it puts decision models into your code. There are no prompts to template, no text to parse, and no agents to configure. vibecheck gives you the simplest, fastest way to put AI decisions in your code.
 
 ## Four Functions
 
