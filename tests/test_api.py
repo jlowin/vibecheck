@@ -1,7 +1,8 @@
 import asyncio
+from collections.abc import Mapping
 from dataclasses import dataclass
 from enum import Enum
-from typing import Annotated, Literal, NamedTuple, TypedDict
+from typing import Annotated, Any, Literal, NamedTuple, TypedDict
 
 import pytest
 from pydantic import BaseModel
@@ -51,7 +52,7 @@ class Sentiment(Enum):
 def refund(ticket: str) -> None:
     """Customer wants money back.
 
-    More detail that should not be sent.
+    Includes duplicate charges.
     """
 
 
@@ -101,8 +102,9 @@ class TestCheck:
         assert backend.calls[0].model == "jev-1.13.0"
 
     def test_question_must_come_first(self):
+        data_first: Any = {"ticket": "hi"}
         with pytest.raises(TypeError, match="question comes first"):
-            sync.check({"ticket": "hi"}, "Is this urgent?", backend=always(yes()))
+            sync.check(data_first, "Is this urgent?", backend=always(yes()))
 
     def test_empty_question_rejected(self):
         with pytest.raises(ValueError, match="empty"):
@@ -171,7 +173,9 @@ class TestClassify:
             is Sentiment.NEGATIVE
         )
 
-    def test_functions_are_labelled_by_name_and_described_by_docstring(self):
+    def test_functions_are_labelled_by_name_and_described_by_signature_and_docstring(
+        self,
+    ):
         backend = always(pick(refund=0.9, escalate=0.1))
         handler = sync.classify(
             "How to handle?", [refund, escalate], "x", backend=backend
@@ -179,8 +183,60 @@ class TestClassify:
         question = backend.calls[0].questions["answer"]
         assert handler is refund
         assert question.options == {
-            "refund": "Customer wants money back.",
-            "escalate": "Anything else.",
+            "refund": {
+                "signature": "refund(ticket: str) -> None",
+                "docstring": "Customer wants money back.\n\nIncludes duplicate charges.",
+            },
+            "escalate": {
+                "signature": "escalate(ticket: str) -> None",
+                "docstring": "Anything else.",
+            },
+        }
+
+    def test_classes_are_described_by_init_signature_and_docstring(self):
+        class Refund:
+            """Money back for a charge."""
+
+            def __init__(self, order_id: str, amount: float) -> None: ...
+
+        class Escalate:
+            """Anything else."""
+
+            def __init__(self, reason: str) -> None: ...
+
+        backend = always(pick(Refund=0.9, Escalate=0.1))
+        assert (
+            sync.classify("How to handle?", [Refund, Escalate], "x", backend=backend)
+            is Refund
+        )
+        question = backend.calls[0].questions["answer"]
+        assert question.options["Refund"] == {
+            "signature": "Refund(order_id: str, amount: float) -> None",
+            "docstring": "Money back for a charge.",
+        }
+
+    def test_function_without_docstring_is_described_by_signature(self):
+        def archive(ticket: str) -> None: ...
+
+        backend = always(pick(archive=0.9, escalate=0.1))
+        sync.classify("How to handle?", [archive, escalate], "x", backend=backend)
+        question = backend.calls[0].questions["answer"]
+        assert question.options["archive"] == {
+            "signature": "archive(ticket: str) -> None"
+        }
+
+    def test_dict_value_overrides_function_description(self):
+        backend = always(pick(refund=0.9, escalate=0.1))
+        sync.classify(
+            "How to handle?",
+            {refund: "Money back", escalate: "Everything else"},
+            "x",
+            backend=backend,
+        )
+        question = backend.calls[0].questions["answer"]
+        assert question.options == {
+            "refund": "Money back",
+            "escalate": "Everything else",
         }
 
     def test_non_string_values_are_restored(self):
@@ -387,9 +443,9 @@ class TestAssess:
     def test_field_name_is_the_default_question(self):
         backend = typed_backend()
         sync.assess("Triage this", TriageDataclass, "x", backend=backend)
-        assert (
-            backend.calls[0].questions["team.answer"].instructions["question"] == "team"
-        )
+        instructions = backend.calls[0].questions["team.answer"].instructions
+        assert isinstance(instructions, Mapping)
+        assert instructions["question"] == "team"
 
     @pytest.mark.parametrize(
         ("returns", "expected"), [(float, pytest.approx(1.6)), (int, 2)]
