@@ -30,7 +30,7 @@ The whole API is four functions. Each one takes a question and the data it's abo
 
 Everything else in vibecheck applies these four at scale, to every item in a list or to many questions about the same data.
 
-Simple doesn't mean limited: you still get every probability when you want it, an explicit "unsure" when a yes-or-no question is too close to call, and many questions answered in a single request.
+Simple doesn't mean limited: you still get the full power of the Jev API.
 
 These functions are async by default. To use them synchronously, import them from `vibecheck.sync` instead:
 
