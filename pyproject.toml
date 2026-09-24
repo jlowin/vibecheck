@@ -1,0 +1,40 @@
+[project]
+name = "pyvibecheck"
+version = "0.1.0"
+description = "The easiest way to use decision models in Python."
+readme = "README.md"
+authors = [
+    { name = "Jeremiah Lowin", email = "153965+jlowin@users.noreply.github.com" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.12",
+    "typesafe-sdk>=0.7.1",
+]
+
+[build-system]
+requires = ["uv_build>=0.11.7,<0.12.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "vibecheck"
+
+[dependency-groups]
+dev = [
+    "ipython>=9.17.1",
+    "pdbpp>=0.12.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.16.8",
+    "ty>=0.0.83",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff.lint]
+extend-select = ["I", "UP", "B"]
+
+[tool.ruff.format]
+exclude = ["*.md"]
