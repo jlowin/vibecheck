@@ -1,4 +1,4 @@
-# vibecheck
+# ✨✅ vibecheck
 
 **The easiest decisions your code will ever make.**
 
