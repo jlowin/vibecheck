@@ -4,7 +4,9 @@
 
 vibecheck lets you drop decision models right into your Python code.
 
-Decision models such as [Jev](https://typesafe.ai) are a new kind of AI model built for judgment calls: they answer typed questions (yes or no, pick one, rate on a scale) in a fraction of a second, for a fraction of a cent, with a probability attached to every answer. vibecheck turns those answers into plain Python values:
+Decision models such as [Jev](https://typesafe.ai) are a new kind of AI model built for judgment calls. They answer typed questions (yes or no, pick one, rate on a scale) in a fraction of a second, for a fraction of a cent, with a probability attached to every answer.
+
+vibecheck does one thing: it puts decision models in your code. There are no prompts to template, no text to parse, and no agents to configure. There are four functions, one for each kind of decision, and you call whichever one you need. It's the simplest, fastest way to put a decision in your code:
 
 ```python
 from vibecheck import check
@@ -14,8 +16,6 @@ ticket = "Third outage this month. Fix it by Friday or we're moving to another v
 if await check("Is the customer threatening to cancel?", ticket):
     print("Escalating to the account team")
 ```
-
-vibecheck does one thing, and it does it well: it puts decision models in your code. There are no prompts to template, no text to parse, and no agents to configure. vibecheck gives you the simplest, fastest way to put AI decisions in your code.
 
 ## Four Functions
 
@@ -29,6 +29,8 @@ The whole API is four functions. Each one takes a question and the data it's abo
 | `score` | Where on this scale? | a `float` |
 
 Everything else in vibecheck applies these four at scale, to every item in a list or to many questions about the same data.
+
+Simple doesn't mean limited: you still get every probability when you want it, an explicit "unsure" when a yes-or-no question is too close to call, and many questions answered in a single request.
 
 These functions are async by default. To use them synchronously, import them from `vibecheck.sync` instead:
 
