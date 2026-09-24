@@ -1,4 +1,15 @@
-"""An Enum class works as a list of options, and you get a member back."""
+"""Use an Enum as the list of options.
+
+If your code already models the categories as an `Enum`, pass the class itself as the
+options. The model sees each member's value as its label (or its name, when the value
+isn't a string), and you get a member back, so the answer plugs straight into code that
+already expects that type.
+
+This script classifies the tone of three reviews into a `Sentiment` enum. You'll see
+`Sentiment.POSITIVE`, `Sentiment.NEUTRAL`, and `Sentiment.NEGATIVE`.
+
+Run it with `uv run examples/classify/enums.py` after setting `TYPESAFE_API_KEY`.
+"""
 
 from enum import Enum
 

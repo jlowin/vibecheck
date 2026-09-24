@@ -1,7 +1,19 @@
-"""A dict of options describes when each one applies.
+"""Describe each option to settle the edge cases.
 
-The model reads the descriptions, which makes them the place to settle edge cases. Here, refunds
-go to billing even when they involve a returned item.
+Option names carry a lot of meaning, but they can't carry your team's rules. A refund
+for a returned item could reasonably belong to returns or to billing, and the name alone
+won't tell the model which one your company means. Pass a dict instead of a list: the
+keys are the options, and the values describe when each one applies. The model reads
+every description, and the answer is still one of the keys.
+
+Descriptions are where your policy lives. When the model makes a call you disagree with,
+the fix is usually a sharper description rather than a different question.
+
+This script writes the rule "billing handles every refund" into the billing description.
+The lamp refund therefore goes to billing even though it involves a returned item, while
+the size exchange still goes to returns.
+
+Run it with `uv run examples/classify/descriptions.py` after setting `TYPESAFE_API_KEY`.
 """
 
 from vibecheck.sync import classify

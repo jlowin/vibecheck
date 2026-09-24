@@ -1,7 +1,20 @@
-"""A (low, high) threshold returns None when the model is unsure.
+"""Return None when the model is unsure, and let a person decide.
 
-At or above 0.9 is True, below 0.3 is False, and anything in between is None.
-Use `match` rather than `if`, because None is falsy.
+A single threshold forces every case into yes or no. Often the right behavior has three
+outcomes: act on clear yeses, drop clear nos, and send the uncertain middle to a human.
+Pass a `(low, high)` pair as the threshold and `check` does this for you. A probability
+of `high` or more returns `True`, anything below `low` returns `False`, and anything in
+between returns `None`.
+
+Handle the result with `match` rather than `if`. `None` is falsy, so an `if` would
+quietly treat "unsure" as "no", which hides exactly the cases you wanted a person to
+see.
+
+This script sends the alerts from `threshold.py` through a threshold of `(0.3, 0.9)`.
+The full outage pages on-call, the Safari bug is archived, and the ambiguous error spike
+goes to a person.
+
+Run it with `uv run examples/check/three_way.py` after setting `TYPESAFE_API_KEY`.
 """
 
 from vibecheck.sync import check

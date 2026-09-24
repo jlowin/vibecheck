@@ -1,6 +1,17 @@
-"""label returns every option that applies, most likely first.
+"""Pick every option that applies.
 
-Each option is judged on its own, so zero, one, or many can apply.
+`label` is the multi-answer sibling of `classify`. Where `classify` forces one choice,
+`label` judges each option on its own and returns every option that applies, most likely
+first. That's the right shape for tags and topics, where an article can cover several
+subjects on your list, or none of them.
+
+Because each option gets its own yes/no judgment, an empty list is a real answer:
+nothing on the list applies.
+
+This script tags three articles. The business story gets three topics, the baseball game
+gets two (sports, and weather for the rain delay), and the bakery anniversary gets none.
+
+Run it with `uv run examples/label/basic.py` after setting `TYPESAFE_API_KEY`.
 """
 
 from vibecheck.sync import label

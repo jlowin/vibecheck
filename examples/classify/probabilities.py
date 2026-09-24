@@ -1,6 +1,19 @@
-"""probabilities=True returns the answer and every option's probability.
+"""See how confident the choice was.
 
-The probabilities sum to 1. When the top two are close, the case is ambiguous and a person should look.
+Pass `probabilities=True` and `classify` returns a `Decision` pair: the chosen option,
+and a dict of every option and its probability. The options are mutually exclusive, so
+the probabilities sum to 1.
+
+The distribution tells you what the answer alone can't. The most useful signal is the
+margin between the top two options. A wide margin is a clear call; a narrow one means
+the case sits between two categories, and it's often worth sending to a person.
+
+This script classifies two tickets and draws each distribution as a bar chart. The
+double charge goes to billing with nearly all the probability. The second ticket
+mentions both a wrong size and a missing refund, and the margin line shows how clearly
+the model still favors one team.
+
+Run it with `uv run examples/classify/probabilities.py` after setting `TYPESAFE_API_KEY`.
 """
 
 from vibecheck.sync import classify
