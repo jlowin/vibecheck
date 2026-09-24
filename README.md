@@ -17,7 +17,7 @@ if await check("Is the customer threatening to cancel?", ticket):
 
 A decision fits anywhere you'd write an `if`, a `match`, or a `filter`, and anywhere you need a label, a score, or a record filled in from messy text.
 
-vibecheck does one thing: it puts decision models into your code. There are no prompts to template, no text to parse, and no agents to configure. General frameworks for language models, such as Marvin and Pydantic AI, cover much wider ground. vibecheck is small enough to learn from this page.
+vibecheck does one thing: it puts decision models into your code. There are no prompts to template, no text to parse, and no agents to configure. General frameworks for language models, such as LangChain and Pydantic AI, cover much wider ground. vibecheck is small enough to learn from this page.
 
 ## Installation
 
